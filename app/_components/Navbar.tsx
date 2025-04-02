@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/logo.png";
 import AuthModal from "./AuthModal";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const Navbar = () => {
   return (
@@ -14,13 +15,15 @@ const Navbar = () => {
             Calen<span className="text-blue-500">dra.io</span>
           </h4>
         </Link>
-        <div className="md:hidden">Theme toggle</div>
+        <div className="md:hidden">
+          <ThemeToggle />
+        </div>
       </div>
 
       <nav className="hidden md:flex md:justify-end md:space-x-4">
-      {/* Theme toggle */}
+       <ThemeToggle />
 
-      <AuthModal />
+        <AuthModal />
       </nav>
     </div>
   );
