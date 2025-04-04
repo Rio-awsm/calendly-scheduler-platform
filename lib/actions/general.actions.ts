@@ -4,6 +4,7 @@ import { parseWithZod } from "@conform-to/zod";
 import prisma from "../db";
 import { requireUser } from "../hooks";
 import {
+  eventTypeSchema,
   onBoardingSChema,
   onboardingSchemaValidation,
   settingsSchema,
@@ -142,4 +143,28 @@ export async function updateAvailabilityAction(formData: FormData) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function CreateEventTypeAction(prevState : any,formData : FormData) {
+  const session = await requireUser()
+
+  const submission = parseWithZod(formData, {
+    schema: eventTypeSchema,
+  })
+
+  if (submission.status !== "success") {
+    return submission.reply()
+  }
+
+  await prisma.eventType.create({
+    data: {
+      title: submission.value.title,
+      duration: submission.value.duration,
+      url: submission.value.url,
+      description: submission.value.description,
+      userId: session.user?.id as string,
+      videoCallSoftware: submission.value.videoCallSoftware,
+    },
+  })
+  return redirect("/dashboard");
 }
