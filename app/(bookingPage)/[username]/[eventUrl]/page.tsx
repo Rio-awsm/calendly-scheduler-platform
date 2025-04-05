@@ -1,3 +1,4 @@
+import RenderCalender from "@/components/BookingForm/RenderCalender";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import prisma from "@/lib/db";
@@ -49,16 +50,25 @@ const BookingPage = async ({
   params: { userName: string; eventUrl: string };
   searchParams: { date?: string; time?: string };
 }) => {
+  const selectedDate = searchParams.date
+    ? new Date(searchParams.date)
+    : new Date();
   const data = await getData(params.eventUrl, params.userName);
+
+  const formattedDate = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(selectedDate);
   return (
     <div className="min-h-screen w-screen flex items-center justify-center">
       <Card className="w-full max-w-[1000px] mx-auto">
-        <CardContent className="p-5 md:grid md:grid-cols-5 md:gap-4">
+        <CardContent className="p-5 md:flex md:gap-8">
           <div>
             <Image
               src={data.user.image as string}
               alt={`${data.user.name}'s profile picture`}
-              className="size-10 rounded-full"
+              className="size-9 rounded-full"
               width={30}
               height={30}
             />
@@ -69,12 +79,11 @@ const BookingPage = async ({
             <p className="text-sm font-medium text-muted-foreground">
               {data.description}
             </p>
-
             <div className="mt-5 grid gap-y-3">
               <p className="flex items-center">
                 <CalendarX2 className="size-4 mr-2 text-primary" />
                 <span className="text-sm font-medium text-muted-foreground">
-                  23. Sept 2026
+                  {formattedDate}
                 </span>
               </p>
               <p className="flex items-center">
@@ -86,25 +95,29 @@ const BookingPage = async ({
               <p className="flex items-center">
                 <BookMarked className="size-4 mr-2 text-primary" />
                 <span className="text-sm font-medium text-muted-foreground">
-                  {data.videoCallSoftware}
+                  Google Meet
                 </span>
               </p>
             </div>
           </div>
 
-          <Separator
-            orientation="vertical"
-            className="hidden md:block h-full w-[1px]"
-          />
+          <div className="md:flex md:gap-8">
+            <Separator
+              orientation="vertical"
+              className="hidden md:block h-full w-[1px]"
+            />
 
-          <div className="my-4 md:my-0">Render calender</div>
+            <div className="my-4 md:my-0">
+              <RenderCalender daysofWeek={data.user?.Availability as any} />
+            </div>
 
-          <Separator
-            orientation="vertical"
-            className="hidden md:block h-full w-[1px]"
-          />
+            <Separator
+              orientation="vertical"
+              className="hidden md:block h-full w-[1px]"
+            />
 
-          <div>Timeslots</div>
+            <>Timeslot</>
+          </div>
         </CardContent>
       </Card>
     </div>
