@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ExternalLink, Pen, Settings, Trash, Users2 } from "lucide-react";
 import { CopyLinkMenuItem } from "./_components/CopyLinkMenuItem";
+import { Switch } from "@/components/ui/switch";
 
 async function getData(userId: string) {
   const data = await prisma.user.findUnique({
@@ -69,7 +70,7 @@ const DashboardPage = async () => {
           href="/dashboard/new"
         />
       ) : (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 pt-4">
           {data.EventType.map((item) => (
             <div
               className="overflow-hidden shadow rounded-lg border relative"
@@ -135,6 +136,7 @@ const DashboardPage = async () => {
               </Link>
               <div className="bg-muted dark:bg-gray-900 px-5 py-3 flex justify-between items-center">
                 {/* Menuactiveswitcher */}
+                <Switch />
                 <Link href={`/dashboard/event/${item.id}`}>
                   <Button className="text-white h-11">Edit Event</Button>
                 </Link>
