@@ -14,7 +14,7 @@ const AuthModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="rounded-xl">Try for Free</Button>
+        <Button className="rounded-xl text-white">Try for Free</Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[360px]">
