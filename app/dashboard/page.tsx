@@ -1,10 +1,4 @@
 import { Button } from "@/components/ui/button";
-import prisma from "@/lib/db";
-import { requireUser } from "@/lib/hooks";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import React from "react";
-import { EmptyState } from "./_components/EmptySTate";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,9 +8,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import prisma from "@/lib/db";
+import { requireUser } from "@/lib/hooks";
 import { ExternalLink, Pen, Settings, Trash, Users2 } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import { CopyLinkMenuItem } from "./_components/CopyLinkMenuItem";
-import { Switch } from "@/components/ui/switch";
+import { EmptyState } from "./_components/EmptySTate";
+import MenuActiveSwitcher from "./_components/MenuActiveSwitcher";
 
 async function getData(userId: string) {
   const data = await prisma.user.findUnique({
@@ -135,8 +134,10 @@ const DashboardPage = async () => {
                 </div>
               </Link>
               <div className="bg-muted dark:bg-gray-900 px-5 py-3 flex justify-between items-center">
-                {/* Menuactiveswitcher */}
-                <Switch />
+                <MenuActiveSwitcher
+                  initialChecked={item.active}
+                  eventTypeId={item.id}
+                />
                 <Link href={`/dashboard/event/${item.id}`}>
                   <Button className="text-white h-11">Edit Event</Button>
                 </Link>

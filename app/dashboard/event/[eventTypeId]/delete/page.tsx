@@ -6,7 +6,7 @@ import Link from "next/link"
 const EventDeletePage = ({ params }: { params: { eventTypeId: string } }) => {
   return (
     <div className="flex-1 flex items-center justify-center">
-      <Card>
+      <Card className="w-[300px]">
         <CardHeader>
           <CardTitle>Delete Event Type</CardTitle>
           <CardDescription>
@@ -14,12 +14,12 @@ const EventDeletePage = ({ params }: { params: { eventTypeId: string } }) => {
           </CardDescription>
         </CardHeader>
         <CardFooter className="w-full flex justify-between">
-          <Button asChild variant="secondary" className="text-white h-11">
+          <Button asChild variant="secondary" className="text-white h-11 md:w-[100px]">
             <Link href="/dashboard">Cancel</Link>
           </Button>
           <form action={DeleteEventTypeAction}>
             <input type="hidden" name="id" value={params.eventTypeId} />
-            <Button variant="destructive">Delete</Button>
+            <Button variant="destructive" className="h-11 md:w-[100px]">Delete</Button>
           </form>
         </CardFooter>
       </Card>
