@@ -11,12 +11,12 @@ import { BookMarked, CalendarX2, Clock } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-async function getData(eventUrl: string, userName: string) {
+async function getData(eventUrl: string, username: string) {
   const data = await prisma.eventType.findFirst({
     where: {
       url: eventUrl,
       user: {
-        username: userName,
+        username: username,
       },
       active: true,
     },
@@ -51,13 +51,13 @@ const BookingPage = async ({
   params,
   searchParams,
 }: {
-  params: { userName: string; eventUrl: string };
+  params: { username: string; eventUrl: string };
   searchParams: { date?: string; time?: string };
 }) => {
   const selectedDate = searchParams.date
     ? new Date(searchParams.date)
     : new Date();
-  const data = await getData(params.eventUrl, params.userName);
+  const data = await getData(params.eventUrl, params.username);
   const showForm = !!searchParams.date && !!searchParams.time;
 
   const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -110,7 +110,7 @@ const BookingPage = async ({
             </div>
             <form className="flex flex-col gap-y-4 w-full" action={CreateMeeting}>
               <input type="hidden" name="eventTypeId" value={data.id} />
-              <input type="hidden" name="username" value={params.userName} />
+              <input type="hidden" name="username" value={params.username} />
               <input type="hidden" name="fromTime" value={searchParams.time} />
               <input type="hidden" name="eventDate" value={searchParams.date} />
               <input type="hidden" name="meetingLength" value={data.duration} />
@@ -188,7 +188,7 @@ const BookingPage = async ({
 
               <TimeTable
                 selectedDate={selectedDate}
-                userName={params.userName}
+                userName={params.username}
                 meetingDuration={data.duration}
               />
             </div>
