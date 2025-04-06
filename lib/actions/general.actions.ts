@@ -227,3 +227,29 @@ const meetingLength = Number(formData.get("meetingLength"));
   })
   return redirect(`/success`);
 }
+
+export async function CancelEvent(formData: FormData) {
+  const session = await requireUser()
+
+  const userData = await prisma.user.findUnique({
+    where: {
+      id: session.user?.id as string
+    },
+    select: {
+      grantEmail: true,
+      grantId: true,
+    }
+  })
+  if(!userData) {
+    throw new Error("User not found")
+  }
+
+  const data = await nylas.events.destroy({
+    eventId: formData.get("eventId") as string,
+    identifier: userData?.grantId as string,
+    queryParams: {
+      calendarId: userData?.grantEmail as string
+    }
+  })
+  revalidatePath("/dashboard/meetings")
+}
