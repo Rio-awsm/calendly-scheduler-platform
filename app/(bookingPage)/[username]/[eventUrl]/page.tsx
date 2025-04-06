@@ -1,4 +1,5 @@
 import RenderCalender from "@/components/BookingForm/RenderCalender";
+import TimeTable from "@/components/BookingForm/TimeTable";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import prisma from "@/lib/db";
@@ -116,7 +117,11 @@ const BookingPage = async ({
               className="hidden md:block h-full w-[1px]"
             />
 
-            <>Timeslot</>
+            <TimeTable
+              selectedDate={selectedDate}
+              userName={params.userName}
+              meetingDuration={data.duration}
+            />
           </div>
         </CardContent>
       </Card>
