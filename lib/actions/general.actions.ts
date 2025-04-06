@@ -8,6 +8,7 @@ import { requireUser } from "../hooks";
 import { nylas } from "../nylas";
 import {
   eventTypeSchema,
+  EventTypeServerSchema,
   onboardingSchemaValidation,
   settingsSchema
 } from "../zodSchemas";
@@ -252,4 +253,44 @@ export async function CancelEvent(formData: FormData) {
     }
   })
   revalidatePath("/dashboard/meetings")
+}
+
+export async function EditEventTypeAction(prevState: any, formData: FormData) {
+  const session = await requireUser();
+
+  const submission = await parseWithZod(formData, {
+    schema: EventTypeServerSchema({
+      async isUrlUnique() {
+        const data = await prisma.eventType.findFirst({
+          where: {
+            userId: session.user?.id,
+            url: formData.get("url") as string,
+          },
+        });
+        return !data;
+      },
+    }),
+
+    async: true,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  const data = await prisma.eventType.update({
+    where: {
+      id: formData.get("id") as string,
+      userId: session.user?.id as string,
+    },
+    data: {
+      title: submission.value.title,
+      duration: submission.value.duration,
+      url: submission.value.url,
+      description: submission.value.description,
+      videoCallSoftware: submission.value.videoCallSoftware,
+    },
+  });
+
+  return redirect("/dashboard");
 }
