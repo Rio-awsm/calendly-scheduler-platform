@@ -54,11 +54,14 @@ const BookingPage = async ({
   params: { username: string; eventUrl: string };
   searchParams: { date?: string; time?: string };
 }) => {
-  const selectedDate = searchParams.date
-    ? new Date(searchParams.date)
+  const date = searchParams.date;
+  const time = searchParams.time;
+
+  const selectedDate = date
+    ? new Date(date)
     : new Date();
   const data = await getData(params.eventUrl, params.username);
-  const showForm = !!searchParams.date && !!searchParams.time;
+  const showForm = !! date && !! time;
 
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
@@ -111,8 +114,8 @@ const BookingPage = async ({
             <form className="flex flex-col gap-y-4 w-full" action={CreateMeeting}>
               <input type="hidden" name="eventTypeId" value={data.id} />
               <input type="hidden" name="username" value={params.username} />
-              <input type="hidden" name="fromTime" value={searchParams.time} />
-              <input type="hidden" name="eventDate" value={searchParams.date} />
+              <input type="hidden" name="fromTime" value={time} />
+              <input type="hidden" name="eventDate" value={date} />
               <input type="hidden" name="meetingLength" value={data.duration} />
               <div className="flex flex-col gap-y-1">
                 <Label>Your Name</Label>
