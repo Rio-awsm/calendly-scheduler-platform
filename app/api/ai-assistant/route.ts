@@ -2,8 +2,31 @@ import prisma from "@/lib/db";
 import { requireUser } from "@/lib/hooks";
 import { nylas } from "@/lib/nylas";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { format, fromUnixTime } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+
+function formatReadableDate(date: Date) {
+  const day = date.getDate();
+  const month = date.toLocaleString("en-GB", { month: "long" });
+  const year = date.getFullYear();
+
+  const getOrdinalSuffix = (n: any) => {
+    if (n > 3 && n < 21) return "th"; // covers 11th to 13th
+    switch (n % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
+
+  return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,31 +64,31 @@ export async function POST(request: NextRequest) {
     });
 
     const eventsData = events.data.map((event: any) => {
-      const startDate = new Date(event.when.startTime * 1000);
-      const endDate = new Date(event.when.endTime * 1000);
-      
+      const startDate = format(
+        fromUnixTime(event.when.startTime),
+        "EEE, dd MMM"
+      );
+      const startTime = format(fromUnixTime(event.when.startTime), "hh:mm a");
+      const endTime = format(fromUnixTime(event.when.endTime), "hh:mm a");
+
       return {
         title: event.title,
-        date: startDate.toLocaleDateString(),
-        startTime: startDate.toLocaleTimeString(),
-        endTime: endDate.toLocaleTimeString(),
+        date: startDate,
+        startTime: startTime,
+        endTime: endTime,
         description: event.description || "No description",
         participants:
           event.participants?.map((p: any) => p.name).join(", ") ||
           "No participants",
       };
     });
-    
-    console.log(eventsData);
-    
-
     const context = `
 User: ${user.name || "User"}
-Date: ${today.toLocaleDateString()}
-Upcoming meetings today: ${
+Date: ${formatReadableDate(today)}
+Upcoming meetings: ${
       eventsData.length > 0
         ? JSON.stringify(eventsData, null, 2)
-        : "No meetings scheduled for today"
+        : "No meetings scheduled"
     }
 `;
 
@@ -81,7 +104,7 @@ ${context}
 
 User query: ${message}
 
-IMPORTANT: Do not use any markdown formatting like asterisks (*) or other special characters in your response. Interpret the dates as DD/MM/YYYY format.
+IMPORTANT: Do not use any markdown formatting like asterisks (*) or other special characters in your response. Interpret the context date as DD/MM/YYYY format.
 Respond in a helpful, concise manner about their schedule. If the user asks about meeting preparation or what they should say in a meeting,
 provide general advice based on the meeting title and description And if the user ask for more details then try to go deeper on the meeting topics.
 `;

@@ -111,7 +111,7 @@ const AiScheduleAssistant = () => {
             {isLoading && (
               <div className="flex justify-start">
                 <div className="max-w-[80%] p-3 rounded-lg bg-muted">
-                  Thinking...
+                 Getting schedules....
                 </div>
               </div>
             )}
