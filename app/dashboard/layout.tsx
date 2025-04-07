@@ -1,12 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import Logo from "@/public/logo.png";
-import React, { ReactNode } from "react";
-import { DasboardLinks } from "./_components/DashboardLinks";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import AiScheduleAssistant from "@/components/AiScheduleAssistant";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { auth, signOut } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import prisma from "@/lib/db";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
+import { auth, signOut } from "@/lib/auth";
+import prisma from "@/lib/db";
+import Logo from "@/public/logo.png";
+import { Menu } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { ReactNode } from "react";
+import { DasboardLinks } from "./_components/DashboardLinks";
 
 async function getData(userId: string) {
   const data = await prisma.user.findUnique({
@@ -132,6 +133,7 @@ const layout = async ({ children }: { children: ReactNode }) => {
           </main>
         </div>
       </div>
+      <AiScheduleAssistant />
       <Toaster richColors closeButton />
     </>
   );
