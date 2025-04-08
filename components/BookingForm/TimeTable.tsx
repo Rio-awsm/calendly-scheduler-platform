@@ -2,12 +2,12 @@ import prisma from "@/lib/db";
 import { nylas } from "@/lib/nylas";
 import { Prisma } from "@prisma/client";
 import {
-    addMinutes,
-    format,
-    fromUnixTime,
-    isAfter,
-    isBefore,
-    parse,
+  addMinutes,
+  format,
+  fromUnixTime,
+  isAfter,
+  isBefore,
+  parse,
 } from "date-fns";
 import Link from "next/link";
 import { GetFreeBusyResponse, NylasResponse } from "nylas";
@@ -140,7 +140,7 @@ const TimeTable = async ({
               key={index}
               href={`?date=${format(selectedDate, "yyyy-MM-dd")}&time=${slot}`}
             >
-              <Button variant="outline" className="w-full mb-2 text-white">
+              <Button variant="outline" className="w-full mb-2 text-black dark:text-white">
                 {slot}
               </Button>
             </Link>

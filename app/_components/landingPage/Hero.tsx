@@ -1,7 +1,6 @@
-import React from "react";
-import AuthModal from "../AuthModal";
-import Image from "next/image";
 import HeroImage from "@/public/better.png";
+import Image from "next/image";
+import AuthModal from "../AuthModal";
 
 const Hero = () => {
   return (
@@ -9,7 +8,7 @@ const Hero = () => {
       <div className="relative items-center w-full py-12 lg:py-20">
         <div className="text-center">
           <span className="text-sm text-primary font-medium tracking-tight bg-primary/10 px-4 py-2 rounded-full">
-            Introducing Calendra.io
+            Now powered with AI
           </span>
           <h1 className="mt-8 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-medium leading-none">
             Scheduling made{" "}
