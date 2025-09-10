@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import React from 'react'
 
 const CTA = () => {
   return (
@@ -10,7 +9,7 @@ const CTA = () => {
       </h2>
       <h3 className="mx-auto mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
         Calendra.io makes it easy for your clients to scheduale a meeting with
-        you clients.
+        your clients.
       </h3>
       <div className="mt-8 flex items-center justify-center gap-x-6">
         <Button className='text-white h-11'>Get Started Today</Button>
